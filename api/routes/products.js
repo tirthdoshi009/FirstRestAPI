@@ -9,25 +9,22 @@ router.get('/',(req,res,next) =>{
 
 
 router.post('/',(req,res,next) =>{
-    res.status(200).json({
+    res.status(201).json({
         message: 'Handling POST request'
     });
 });
 
-router.get('/:productId', (req,res,next)=>{
+router.patch('/:productId', (req,res,next)=>{
+    res.status(200).json({
+        message: 'Product Updated'
+    })
+});
 
-    const id = req.params.productId;
-    if(id === 'special'){
-         res.status(200).json({
-             message: 'You discoverd the special id',
-             id:id
-         });
-    }
-    else{
-        res.status(200).json({
-            message: 'Your id is not special enough'
-        });
-    }
-})
+
+router.delete('/:productId', (req,res,next)=>{
+    res.status(200).json({
+        message: 'Product Deleted'
+    })
+});
 
 module.exports = router;
