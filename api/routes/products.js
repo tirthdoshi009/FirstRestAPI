@@ -9,8 +9,13 @@ router.get('/',(req,res,next) =>{
 
 
 router.post('/',(req,res,next) =>{
+    console.log(req.body.name);
+    const Product = {
+        name : req.body.name,
+        productKey: req.body.key
+    };
     res.status(201).json({
-        message: 'Handling POST request'
+        message: Product
     });
 });
 
