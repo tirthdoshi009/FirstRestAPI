@@ -3,11 +3,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
 const morgan = require('morgan');
-
+const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
-
+mongoose.connect('mongodb+srv://tirth123:'+process.env.MONGO_ATLAS_PWD+'@cluster0-r9se1.mongodb.net/<dbname>?retryWrites=true&w=majority',{useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
