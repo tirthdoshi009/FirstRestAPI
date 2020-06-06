@@ -8,7 +8,14 @@ router.get('/:productId',(req,res,next) =>{
     const id = req.params.productId;
     Product.findById(id).exec().then(doc => {
         console.log("From Database: "+ doc);
-        res.status(200).json(doc);
+        if(doc){
+            res.status(200).json(doc);
+        }
+        else{
+            res.status(404).json({
+                error: "Document not found"
+            });
+        }
     })
     .catch(err => {
         console.log(err)
@@ -18,8 +25,12 @@ router.get('/:productId',(req,res,next) =>{
 }); 
 
 router.get('/',(req,res,next) =>{
-    res.status(200).json({
-        message: 'Handling get request'
+    Product.find().exec().then(docs=>{
+        console.log(docs);
+        res.status(200).json(docs);
+    }).catch(err =>{
+        console.log(err);
+        res.status(500).json(err);
     });
 }); 
 
@@ -33,24 +44,44 @@ router.post('/',(req,res,next) =>{
     });
     product.save().then(result=> {
         console.log(result);
-    }).catch(err => console.log(err));
-    res.status(201).json({
-        message: product
+        res.status(201).json({
+            message: result
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
     });
+   
 });
 
 router.patch('/:productId', (req,res,next)=>{
-    res.status(200).json({
-        message: 'Product Updated'
-    })
+    const id = req.params.productId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName] = ops.value;
+    }
+    Product.updateOne({_id : id}, {$set: updateOps})
+    .exec().
+    then(result =>{
+        console.log(result);
+        res.status(200).json(result);
+    }).catch(err=>{
+        console.log(err);
+        res.status(500).json(err);
+    });
 });
 
 
 router.delete('/:productId', (req,res,next)=>{
-    
-    res.status(200).json({
-        message: 'Product Deleted'
-    })
+    const id = req.params.productId;
+    Product.remove({_id: id}).exec().then(docs=>{
+        console.log(docs);
+        res.status(200).json(docs);
+    }).catch(err =>{
+        error: err
+    });
 });
 
 module.exports = router;
